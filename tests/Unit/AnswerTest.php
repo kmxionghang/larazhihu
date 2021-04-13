@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Answer;
 use App\Models\Question;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class AnswerTest extends TestCase
@@ -47,5 +48,29 @@ class AnswerTest extends TestCase
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo', $question->creator());
         $this->assertInstanceOf('App\Models\User', $question->creator);
+    }
+
+    /** @test */
+    public function can_vote_up_an_answer()
+    {
+        $this->signIn();
+
+        $answer = create(Answer::class);
+
+        $this->assertDatabaseMissing('votes', [
+            'user_id' => auth()->id(),
+            'voted_id' => $answer->id,
+            'voted_type' => get_class($answer),
+            'type' => 'vote_up',
+        ]);
+
+        $answer->voteUp(Auth::user());
+
+        $this->assertDatabaseHas('votes', [
+            'user_id' => auth()->id(),
+            'voted_id' => $answer->id,
+            'voted_type' => get_class($answer),
+            'type' => 'vote_up',
+        ]);
     }
 }
