@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Answer;
+use App\Question;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -28,5 +29,23 @@ class AnswerTest extends TestCase
         $answer = create(Answer::class);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo', $answer->question());
+    }
+
+    /** @test */
+    public function an_answer_belongs_to_an_owner()
+    {
+        $answer = create(Answer::class);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo', $answer->owner());
+        $this->assertInstanceOf('App\User', $answer->owner);
+    }
+
+    /** @test */
+    public function a_question_belongs_to_a_creator()
+    {
+        $question = create(Question::class);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo', $question->creator());
+        $this->assertInstanceOf('App\User', $question->creator);
     }
 }
