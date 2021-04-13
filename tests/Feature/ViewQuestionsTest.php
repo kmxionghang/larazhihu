@@ -41,6 +41,7 @@ class ViewQuestionsTest extends TestCase
     /** @test */
     public function user_cannot_view_unpublished_question()
     {
+        // 过滤未发布的问题
         $question = factory(Question::class)->create(['published_at' => null]);
 
 //        $this->get('/questions/' . $question->id)
