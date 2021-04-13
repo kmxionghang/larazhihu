@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Question;
+use App\Question;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -29,9 +29,10 @@ class ViewQuestionsTest extends TestCase
 
         // 2. 访问链接
         $test = $this->get('/questions/' . $question->id);
+
         // 3. 那么应该看到问题的内容
-        $test->assertStatus(200);
-//            ->assertSee($question->title)
-//            ->assertSee($question->content);
+        $test->assertStatus(200)
+            ->assertSee($question->title)
+            ->assertSee($question->content);
     }
 }
