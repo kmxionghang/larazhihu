@@ -22,6 +22,7 @@ class CreateVotesTable extends Migration
             $table->timestamps();
 
             $table->unique(['user_id','voted_id','voted_type','type']);
+            $table->unique(['user_id','voted_id','voted_type','type']);
         });
     }
 
