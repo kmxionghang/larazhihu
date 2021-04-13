@@ -42,7 +42,7 @@ class PostAnswerTest extends TestCase
     public function signed_in_user_can_post_an_answer_to_a_published_question()
     {
         $question = factory(Question::class)->state('published')->create();
-        $this->actingAs($user = factory(User::class)->create()); // 测试登录用户
+        $this->signIn($user = create(User::class)); // 测试登录用户
 
         $response = $this->post("/questions/{$question->id}/answers", [
             'content' => 'This is an answer'
@@ -60,7 +60,7 @@ class PostAnswerTest extends TestCase
     public function can_not_post_an_answer_to_an_unpublished_question()
     {
         $question = factory(Question::class)->state('unpublished')->create();
-        $this->actingAs($user = factory(User::class)->create());
+        $this->signIn($user = create(User::class));
 
         $response = $this->withExceptionHandling()
             ->post("/questions/{$question->id}/answers", [
@@ -81,7 +81,7 @@ class PostAnswerTest extends TestCase
         $this->withExceptionHandling();
 
         $question = factory(Question::class)->state('published')->create();
-        $this->actingAs($user = factory(User::class)->create());
+        $this->signIn($user = create(User::class));
 
         $response = $this->post("/questions/{$question->id}/answers", [
             'user_id' => $user->id,
