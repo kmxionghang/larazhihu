@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Answer;
-use App\Question;
+use App\Models\Answer;
+use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 // 使用 `php artisan make:test QuestionTest --unit` 命令生成后, TestCase 默认使用的是下面的命名空间. 需要改成 `use Tests\TestCase;`
