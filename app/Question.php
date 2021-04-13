@@ -18,4 +18,11 @@ class Question extends Model
     {
         return $query->whereNotNull('published_at');
     }
+
+    public function markAsBestAnswer($answer)
+    {
+        $this->update([
+            'best_answer_id' => $answer->id
+        ]);
+    }
 }
