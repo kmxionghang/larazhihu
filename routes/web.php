@@ -13,4 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('questions', 'QuestionsController@index')->name('questions.index');
+Route::get('/questions', 'QuestionsController@index')->name('questions.index');
+Route::get('/questions/{question}', 'QuestionsController@show');

@@ -9,4 +9,8 @@ class QuestionsController extends Controller
     public function index()
     {
     }
+
+    public function show()
+    {
+    }
 }
