@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
+    use \App\Models\Traits\VoteTrait;
 
     protected $guarded = ['id'];
 
