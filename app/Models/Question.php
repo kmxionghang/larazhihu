@@ -13,9 +13,10 @@ class Question extends Model
     protected $guarded = ['id'];
 
     protected $appends = [
-      'upVotesCount',
-      'downVotesCount',
-      'subscriptionsCount',
+        'upVotesCount',
+        'downVotesCount',
+        'subscriptionsCount',
+        'commentsCount',
     ];
 
     public function answers()
@@ -32,9 +33,15 @@ class Question extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commented');
     }
 
     public function scopePublished($query)
@@ -105,8 +112,8 @@ class Question extends Model
 
     public function isSubscribedTo($user)
     {
-        if (! $user) {
-          return false;
+        if (!$user) {
+            return false;
         }
 
         return $this->subscriptions()
@@ -122,5 +129,20 @@ class Question extends Model
     public function path()
     {
         return $this->slug ? "/questions/{$this->category->slug}/{$this->id}/{$this->slug}" : "/questions/{$this->category->slug}/{$this->id}";
+    }
+
+    public function comment($content, $user)
+    {
+        $comment =  $this->comments()->create([
+            'user_id' => $user->id,
+            'content' => $content
+        ]);
+
+        return $comment;
+    }
+
+    public function getCommentsCountAttribute()
+    {
+        return $this->comments->count();
     }
 }

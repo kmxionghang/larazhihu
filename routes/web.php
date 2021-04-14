@@ -46,3 +46,6 @@ Route::delete('/questions/{question}/down-votes', 'QuestionDownVotesController@d
 Route::get('/drafts', 'DraftsController@index');
 
 
+Route::post('/questions/{question}/comments', 'QuestionCommentsController@store')->name('question-comments.store');
+
+

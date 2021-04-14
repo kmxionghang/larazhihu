@@ -5,12 +5,14 @@ namespace Tests\Unit;
 use App\Jobs\TranslateSlug;
 use App\Models\Answer;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Question;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Notifications\QuestionWasUpdated;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 // 使用 `php artisan make:test QuestionTest --unit` 命令生成后, TestCase 默认使用的是下面的命名空间. 需要改成 `use Tests\TestCase;`
 // use PHPUnit\Framework\TestCase;
 use Illuminate\Support\Facades\Notification;
@@ -64,7 +66,7 @@ class QuestionTest extends TestCase
             'content' => '@Jane @Luke please help me!'
         ]);
 
-        $this->assertEquals(['Jane','Luke'], $question->invitedUsers());
+        $this->assertEquals(['Jane', 'Luke'], $question->invitedUsers());
     }
 
     /** @test */
@@ -187,11 +189,46 @@ class QuestionTest extends TestCase
 
         $this->assertEquals("/questions/{$question->category->slug}/{$question->id}/english-english", $question->path());
     }
+
     /** @test */
     public function a_question_belongs_to_a_category()
     {
         $question = create(Question::class);
 
         $this->assertInstanceOf(Category::class, $question->category);
+    }
+
+    /** @test */
+    public function a_question_has_many_comments()
+    {
+        $question = factory(Question::class)->create();
+
+        create(Comment::class, [
+            'commented_id' => $question->id,
+            'commented_type' => $question->getMorphClass(),
+            'content' => 'it is a comment'
+        ]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\MorphMany', $question->comments());
+    }
+
+    /** @test */
+    public function can_comment_a_question()
+    {
+        $question = create(Question::class);
+
+        $question->comment('it is content', create(User::class));
+
+        $this->assertEquals(1, $question->refresh()->comments()->count());
+    }
+
+    /** @test */
+    public function can_get_comments_count_attribute()
+    {
+        $question = create(Question::class);
+
+        $question->comment('it is content', create(User::class));
+
+        $this->assertEquals(1, $question->refresh()->commentsCount);
     }
 }
