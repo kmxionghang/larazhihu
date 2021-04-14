@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Activity;
 use App\Models\User;
 
 use Tests\Testcase;
