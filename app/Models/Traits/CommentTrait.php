@@ -26,4 +26,9 @@ trait CommentTrait
     {
         return $this->comments->count();
     }
+
+    public function getCommentEndpointAttribute()
+    {
+        return '/' . $this->table .'/' . $this->id . '/comments';
+    }
 }

@@ -30,7 +30,7 @@ class AnswerCommentsController extends Controller
         ]);
         $comment = $answer->comment(request('content'), auth()->user());
 
-        return back();
+        return $comment->load('owner');
 
     }
 }
