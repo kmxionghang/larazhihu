@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PublishQuestion;
 use App\Models\Question;
 use App\Models\User;
 use App\Notifications\YouWereInvited;
@@ -19,18 +20,20 @@ class PublishedQuestionsController extends Controller
     {
         $this->authorize('update', $question);
 
-        preg_match_all('/@([^\s.]+)/',$question->content,$matches);
-
-        $names = $matches[1];
-
-        foreach ($names as $name){
-            $user = User::whereName($name)->first();
-
-            if($user){
-                $user->notify(new YouWereInvited($question));
-            }
-        }
-
         $question->publish();
+
+//        $names = $question->invitedUsers();
+//
+//        foreach ($names as $name){
+//            $user = User::whereName($name)->first();
+//
+//            if($user){
+//                $user->notify(new YouWereInvited($question));
+//            }
+//        }
+
+        event(new PublishQuestion($question));
+
+        return redirect("/questions/{$question->id}")->with('flash', "发布成功！");
     }
 }

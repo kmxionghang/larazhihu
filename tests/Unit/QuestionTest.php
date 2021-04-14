@@ -49,4 +49,14 @@ class QuestionTest extends TestCase
 
         $this->assertEquals($question->best_answer_id, $answer->id);
     }
+
+    /** @test */
+    public function it_can_detect_all_invited_users()
+    {
+        $question = create(Question::class, [
+            'content' => '@Jane @Luke please help me!'
+        ]);
+
+        $this->assertEquals(['Jane','Luke'], $question->invitedUsers());
+    }
 }
