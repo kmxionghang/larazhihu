@@ -6,10 +6,12 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Notifications\QuestionWasUpdated;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 // 使用 `php artisan make:test QuestionTest --unit` 命令生成后, TestCase 默认使用的是下面的命名空间. 需要改成 `use Tests\TestCase;`
 // use PHPUnit\Framework\TestCase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class QuestionTest extends TestCase
@@ -140,5 +142,23 @@ class QuestionTest extends TestCase
         ]);
 
         $this->assertEquals(1, $question->refresh()->answers()->count());
+    }
+
+    /** @test */
+    public function notify_all_subscribers_when_an_answer_is_added()
+    {
+        Notification::fake();
+
+        $user = create(User::class);
+
+        $question = create(Question::class);
+
+        $question->subscribe($user->id)
+            ->addAnswer([
+                'content' => 'Foobar',
+                'user_id' => 999 // 伪造一个与当前登录用户不同的 id
+            ]);
+
+        Notification::assertSentTo($user, QuestionWasUpdated::class);
     }
 }
