@@ -22,6 +22,7 @@ class UserTest extends TestCase
 
         $this->assertEquals('http://example.com/avatar.png', $user->avatar_path);
     }
+
     /** @test */
     public function user_can_determine_avatar_path()
     {
@@ -35,9 +36,19 @@ class UserTest extends TestCase
     public function can_get_user_avatar_attribute()
     {
         $user = create(User::class, [
-        'avatar_path' => 'avatars/example.png'
+            'avatar_path' => 'avatars/example.png'
         ]);
 
         $this->assertEquals(url('storage/avatars/example.png'), $user->userAvatar);
+    }
+
+    /** @test */
+    public function a_user_has_many_activities()
+    {
+        $user = create(User::class);
+
+        create(Activity::class, ['user_id' => $user->id]);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\HasMany', $user->activities());
     }
 }

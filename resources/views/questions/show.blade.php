@@ -4,7 +4,7 @@
 
 @section('content')
     <question :attributes="{{ $question }}" :displaySubscription="true" inline-template>
-        <div class="row" >
+        <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 question-content">
                 <div class="card">
                     <div class="card-body">
@@ -49,8 +49,9 @@
                         <hr>
                         <div class="media">
                             <div align="center">
-                                <a href="#">
-                                    <img class="thumbnail img-fluid" src="{{ $question->creator->userAvatar }}" width="300px" height="300px"/>
+                                <a href="/profiles/{{ $question->creator->id }}">
+                                    <img class="thumbnail img-fluid" src="{{ $question->creator->userAvatar }}"
+                                         width="300px" height="300px"/>
                                 </a>
                             </div>
                         </div>
