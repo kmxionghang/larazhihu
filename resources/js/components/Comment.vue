@@ -1,16 +1,19 @@
 <template>
     <li class=" media" :name="'comment' + id" :id="'comment' + id">
         <div class="media-left">
-        <!--之后放置用户头像-->
+            <a :href="'/profiles/' + attributes.owner.name">
+                <img class="media-object img-thumbnail mr-3" :alt="attributes.owner.name"
+                     :src="attributes.user.userAvatar" style="width:48px;height:48px;"/>
+            </a>
         </div>
 
         <div class="media-body">
             <div class="media-heading mt-0 mb-1 text-secondary">
-                <a  :title="attributes.owner.name" v-text="attributes.owner.name">
+                <a :title="attributes.owner.name" v-text="attributes.owner.name">
                 </a>
                 <span class="text-secondary"> • </span>
 
-                <a class="float-right" >
+                <a class="float-right">
                     <span class="meta text-secondary" :title="ago" v-text="ago"></span>
                 </a>
 
@@ -34,7 +37,7 @@
     export default {
         props: ['attributes'],
 
-        components: { CommentAffect },
+        components: {CommentAffect},
 
         data() {
             return {

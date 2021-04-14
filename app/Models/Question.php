@@ -15,6 +15,9 @@ class Question extends Model
     protected $table = 'questions';
     protected $guarded = ['id'];
 
+
+    protected $with = ['category'];
+
     protected $appends = [
         'upVotesCount',
         'downVotesCount',
