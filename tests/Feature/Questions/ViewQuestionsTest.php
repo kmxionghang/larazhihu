@@ -3,6 +3,7 @@
 namespace Tests\Feature\Questions;
 
 use App\Models\Answer;
+use App\Models\Category;
 use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -27,14 +28,14 @@ class ViewQuestionsTest extends TestCase
     /** @test */
     public function user_can_view_a_published_question()
     {
-        // 1. 创建一个问题
-        $question = factory(Question::class)->create(['published_at' => Carbon::parse('-1 week')]);
+        $category = create(Category::class);
+        $question = factory(Question::class)->create([
+            'published_at' => Carbon::parse('-1 week'),
+            'category_id' => $category->id
+        ]);
 
-        // 2. 访问链接
-        $test = $this->get('/questions/' . $question->id);
-
-        // 3. 那么应该看到问题的内容
-        $test->assertStatus(200)
+        $this->get('/questions/' . $category->slug . "/" . $question->id)
+            ->assertStatus(200)
             ->assertSee($question->title)
             ->assertSee($question->content);
     }
@@ -56,10 +57,14 @@ class ViewQuestionsTest extends TestCase
     /** @test */
     public function can_see_answers_when_view_a_published_question()
     {
-        $question = factory(Question::class)->state('published')->create();
+        $category = create(Category::class);
+        $question = create(Question::class, [
+            'published_at' => Carbon::now(),
+            'category_id' => $category->id
+        ]);
         create(Answer::class, ['question_id' => $question->id], 40);
 
-        $response = $this->get('/questions/' . $question->id);
+        $response = $this->get("/questions/$category->slug/$question->id");
 
         $result = $response->data('answers')->toArray();
 
