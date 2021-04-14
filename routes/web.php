@@ -16,7 +16,7 @@ Auth::routes();
 Auth::routes(['verify' => true]);
 
 
-Route::get('/questions', 'QuestionsController@index')->name('questions.index');
+Route::get('/questions/{category?}', 'QuestionsController@index')->name('questions.index');
 Route::get('/questions/create', 'QuestionsController@create')->name('questions.create');
 Route::get('/questions/{question}', 'QuestionsController@show');
 Route::post('/questions', 'QuestionsController@store')->name('questions.store');
