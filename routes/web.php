@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Auth::routes();
+Auth::routes(['verify' => true]);
+
 
 Route::get('/questions', 'QuestionsController@index')->name('questions.index');
 Route::get('/questions/{question}', 'QuestionsController@show');
