@@ -11,20 +11,17 @@ class SubscribeQuestionsController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function store(Question $question)
     {
-        $question->subscriptions()->create([
-            'user_id' => auth()->id()
-        ]);
+        $question->subscribe(auth()->id());
 
         return response([], 201);
     }
 
     public function destroy(Question $question)
     {
-        $question->subscriptions()
-            ->where('user_id', auth()->id())
-            ->delete();
+        $question->unsubscribe(auth()->id());
 
         return response([], 201);
     }
