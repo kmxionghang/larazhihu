@@ -111,9 +111,7 @@ trait ActiveUserHelperTrait
 
     private function cacheActiveUsers($activeUsers)
     {
-        if ($activeUsers->count()) {
-            // 将数据放入缓存中
-            Cache::put($this->cache_key, $activeUsers, $this->cache_expire_in_seconds);
-        }
+        // 将数据放入缓存中
+        Cache::put($this->cache_key, $activeUsers, $this->cache_expire_in_seconds);
     }
 }
