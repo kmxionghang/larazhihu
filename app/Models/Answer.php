@@ -32,15 +32,19 @@ class Answer extends Model
         }
     }
 
+    public function cancelVoteUp($user)
+    {
+        $this->votes('vote_up')->where(['user_id' => $user->id, 'type' => 'vote_up'])->delete();
+    }
+
     public function voteDown($user)
     {
         $this->votes('vote_down')->create(['user_id' => $user->id, 'type' => 'vote_down']);
     }
 
-
-    public function cancelVoteUp($user)
+    public function cancelVoteDown($user)
     {
-        $this->votes('vote_up')->where(['user_id' => $user->id, 'type' => 'vote_up'])->delete();
+        $this->votes('vote_down')->where(['user_id' => $user->id, 'type' => 'vote_down'])->delete();
     }
 
     public function votes($type)
