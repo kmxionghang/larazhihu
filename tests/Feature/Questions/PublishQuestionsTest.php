@@ -12,6 +12,21 @@ class PublishQuestionsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    public function can_publish_question()
+    {
+        $this->signIn();
+
+        $question = create(Question::class, ['user_id' => auth()->id()]);
+
+        $this->assertCount(0, Question::published()->get());
+
+        $this->post(route('published-questions.store', ['question' => $question]))
+            ->assertRedirect($question->refresh()->path());
+
+        $this->assertCount(1, Question::published()->get());
+    }
+
+    /** @test */
     public function can_publish_a_question()
     {
         $question = create(Question::class, ['published_at' => null]);
@@ -23,7 +38,7 @@ class PublishQuestionsTest extends TestCase
         $this->assertCount(1, Question::published()->get());
     }
 
-   /** @test */
+    /** @test */
     public function guests_may_not_publish_questions()
     {
         $this->withExceptionHandling();
