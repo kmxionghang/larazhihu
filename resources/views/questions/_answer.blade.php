@@ -1,9 +1,8 @@
-<li class=" media" name="answer{{ $answer->id }}" id="answer{{ $answer->id }}">
+<answer :attributes="{{ $answer }}" inline-template>
+    <li class="media" name="answer{{ $answer->id }}" id="answer{{ $answer->id }}">
     <div class="media-left">
         <a href="#">
-            <img class="media-object img-thumbnail mr-3" alt="{{ $answer->owner->name }}"
-                 src="https://cdn.learnku.com/uploads/images/202005/26/19192/mX9UwDEO9g.png!large"
-                 style="width:48px;height:48px;"/>
+            <img class="media-object img-thumbnail mr-3" alt="{{ $answer->owner->name }}" src="https://cdn.learnku.com/uploads/images/202005/26/19192/mX9UwDEO9g.png!large" style="width:48px;height:48px;" />
         </a>
     </div>
 
@@ -13,10 +12,9 @@
                 {{ $answer->owner->name }}
             </a>
             <span class="text-secondary"> • </span>
-            <span class="meta text-secondary"
-                  title="{{ $answer->created_at }}">{{ $answer->created_at->diffForHumans() }}</span>
+            <span class="meta text-secondary" title="{{ $answer->created_at }}">{{ $answer->created_at->diffForHumans() }}</span>
 
-            <a class="float-right">
+            <a class="float-right" >
                 @if($answer->isBest())
                     <button class="btn btn-warning btn-sm"><i class="fa fa-check"></i> 最佳答案</button>
                 @else
@@ -42,5 +40,10 @@
         <div class="answer-content text-secondary">
             {{ $answer->content }}
         </div>
+
+        <small class="media-body meta text-secondary">
+            <answer-affect :answer="{{ $answer }}" v-if="signedIn"></answer-affect>
+        </small>
     </div>
 </li>
+</answer>
