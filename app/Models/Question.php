@@ -25,6 +25,11 @@ class Question extends Model
         return $query->whereNotNull('published_at');
     }
 
+    public function scopeDrafts($query, $userId)
+    {
+        return $query->where(['user_id' => $userId])->whereNull('published_at');
+    }
+
     public function markAsBestAnswer($answer)
     {
         $this->update([
