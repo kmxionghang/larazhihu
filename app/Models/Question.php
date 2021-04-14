@@ -12,6 +12,12 @@ class Question extends Model
 
     protected $guarded = ['id'];
 
+    protected $appends = [
+      'upVotesCount',
+      'downVotesCount',
+      'subscriptionsCount',
+    ];
+
     public function answers()
     {
         return $this->hasMany(Answer::class);
@@ -91,5 +97,21 @@ class Question extends Model
             ->notify($answer);
 
         return $answer;
+    }
+
+    public function isSubscribedTo($user)
+    {
+        if (! $user) {
+          return false;
+        }
+
+        return $this->subscriptions()
+            ->where('user_id', $user->id)
+            ->exists();
+    }
+
+    public function getSubscriptionsCountAttribute()
+    {
+        return $this->subscriptions->count();
     }
 }
