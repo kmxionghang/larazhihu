@@ -3,7 +3,8 @@
 @section('title', $question->title)
 
 @section('content')
-    <div class="row" >
+    <question :attributes="{{ $question }}" :displaySubscription="true" inline-template>
+        <div class="row" >
             <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 question-content">
                 <div class="card">
                     <div class="card-body">
@@ -14,6 +15,10 @@
                         <div class="question-body mt-4 mb-4">
                             {!! $question->content !!}
                         </div>
+
+                        <p class="media-body meta text-secondary">
+                            <question-affect :question="{{ $question }}" :display="true"></question-affect>
+                        </p>
                     </div>
                 </div>
 
@@ -53,4 +58,5 @@
                 </div>
             </div>
         </div>
+    </question>
 @stop
