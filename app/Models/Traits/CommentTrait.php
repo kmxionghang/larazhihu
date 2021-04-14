@@ -2,6 +2,8 @@
 
 namespace App\Models\Traits;
 
+use App\Events\PostComment;
+
 trait CommentTrait
 {
     public function comment($content, $user)
@@ -10,6 +12,7 @@ trait CommentTrait
             'user_id' => $user->id,
             'content' => $content
         ]);
+        event(new PostComment($comment));
 
         return $comment;
     }

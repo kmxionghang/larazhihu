@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Events\PostComment;
 use App\Jobs\TranslateSlug;
 use App\Models\Answer;
 use App\Models\Category;
@@ -10,11 +11,13 @@ use App\Models\Question;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Notifications\QuestionWasUpdated;
+use App\Notifications\YouWereMentionedInComment;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 // 使用 `php artisan make:test QuestionTest --unit` 命令生成后, TestCase 默认使用的是下面的命名空间. 需要改成 `use Tests\TestCase;`
 // use PHPUnit\Framework\TestCase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
@@ -230,5 +233,35 @@ class QuestionTest extends TestCase
         $question->comment('it is content', create(User::class));
 
         $this->assertEquals(1, $question->refresh()->commentsCount);
+    }
+
+    /** @test */
+    public function an_event_is_dispatched_when_a_comment_is_added()
+    {
+        Event::fake();
+
+        $user = create(User::class);
+
+        $question = create(Question::class);
+
+        $question->comment('it is a content', $user);
+
+        Event::assertDispatched(PostComment::class);
+    }
+
+    /** @test */
+    public function a_notification_is_sent_when_a_comment_is_added()
+    {
+        Notification::fake();
+
+        $john = create(User::class, [
+            'name' => 'John'
+        ]);
+
+        $question = create(Question::class);
+
+        $question->comment("@John Thank you", $john);
+
+        Notification::assertSentTo($john, YouWereMentionedInComment::class);
     }
 }
